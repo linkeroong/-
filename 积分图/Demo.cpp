@@ -21,6 +21,42 @@ int main(int argc, char **argv) {
 	float_image = 0;
 	cv::namedWindow("int_image",cv::WINDOW_AUTOSIZE);
 	cv::imshow("int_image", int_image);
+	
+	for (int i = 0; i <= 10; i++) {
+		for (int j = 0; j <= 10; j++)
+		{
+
+			cout << (int)int_image.at<uchar>(i, j) << "\t";
+		}
+		cout << endl;
+	}
+	cout << "---------------------------------------------------------------------------------------" << endl;
+	//对于单通道浮点的Mat计算积分图
+	for (int i = 0; i <=199; i++) {
+		for (int  j = 0; j <= 99; j++)
+		{
+
+			float_image.at<float>(i, j) = cv::sum(int_image.rowRange(0, i+1).colRange(0, j+1))[0];
+		}
+	}
+
+
+	for (int i = 0; i <= 10; i++) {
+		for (int j = 0; j <= 10; j++)
+		{
+
+			cout << float_image.at<float>(i, j)<<"\t" ;
+		}
+		cout << endl;
+	}
+	cout <<"---------------------------------------------------------------------------------------"<< endl;
+	//使用积分计算任意矩形中的像素之和
+	//如：指定区域start(3,3)  end(6,6)
+	long sum = float_image.at<float>(6-1, 6-1) - float_image.at<float>(6-1, 3 - 1) - float_image.at<float>(3 - 1, 6-1) + float_image.at<float>(3 - 1, 3 - 1);
+	cout << sum << endl;
+	float_image /= float_image.at<float>(199, 99);
+
+
 	//在opencv 3.4.5中可以imshow单通道浮点 在4.0.0中不可以imshow单通道浮点
 	cv::namedWindow("float_image", cv::WINDOW_AUTOSIZE);
 	cv::imshow("float_image", float_image);
